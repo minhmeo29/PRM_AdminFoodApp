@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -12,30 +11,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AdminFoodApp"
         tools:targetApi="31">
+
+        <!-- LoginActivity là màn hình khởi động -->
         <activity
-            android:name=".AdminProfileActivity"
+            android:name=".LoginActivity"
+            android:exported="true"> <!-- phải là true để làm màn hình launcher -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- MainActivity không còn là LAUNCHER -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SignUpActivity"
             android:exported="false" />
         <activity
             android:name=".OutForDeliveryActivity"
             android:exported="false" />
         <activity
-            android:name=".SignUpActivity"
+            android:name=".AdminProfileActivity"
             android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
-            android:exported="false" /> <!-- Chuyển MAIN/LAUNCHER về MainActivity -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity> <!-- SplashScreenActivity không còn là màn hình khởi động -->
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true" />
+
     </application>
 
 </manifest>
