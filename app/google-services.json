@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "459966553932",
+    "project_id": "hakyfood-dd982",
+    "storage_bucket": "hakyfood-dd982.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459966553932:android:286007d707c5723cbab9e9",
+        "android_client_info": {
+          "package_name": "com.example.adminfoodapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGR1BPXAnNRvVYRb1210cPeL1z0yGyzPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459966553932:android:6f90c3ea2676b1f3bab9e9",
+        "android_client_info": {
+          "package_name": "com.prm.hakyfood"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGR1BPXAnNRvVYRb1210cPeL1z0yGyzPI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
