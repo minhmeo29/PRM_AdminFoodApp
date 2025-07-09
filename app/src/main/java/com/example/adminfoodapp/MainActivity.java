@@ -2,15 +2,18 @@ package com.example.adminfoodapp;
 
 import static androidx.core.content.ContextCompat.startActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,4 +48,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
+
+
 }
