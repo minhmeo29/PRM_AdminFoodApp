@@ -20,6 +20,12 @@ public class UserModel {
         this.password = password;
     }
 
+    public UserModel(String email, String password)
+    {
+        this.email = email;
+        this.password = password;
+    }
+
 
     // Full constructor
     public UserModel(String name, String nameOfRestaurant, String email, String password, String address, String phone) {
