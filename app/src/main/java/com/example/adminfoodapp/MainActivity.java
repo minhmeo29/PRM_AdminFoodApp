@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
 
     CardView cardDispatch;
     CardView cardProfile;
+    CardView cardCreateUser;
+    CardView cardAllItemMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         // Ánh xạ các CardView từ layout
         cardDispatch = findViewById(R.id.cardDispatch);
         cardProfile = findViewById(R.id.cardProfile);
+        cardCreateUser = findViewById(R.id.cardCreateUser);
+        cardAllItemMenu = findViewById(R.id.cardAllItemMenu);
 
         // Xử lý khi click vào Dispatch (chuyển sang màn hình OutForDelivery)
         cardDispatch.setOnClickListener(view -> {
@@ -45,6 +49,18 @@ public class MainActivity extends AppCompatActivity {
         // Xử lý khi click vào Profile (chuyển sang màn hình AdminProfile)
         cardProfile.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AdminProfileActivity.class);
+            startActivity(intent);
+        });
+
+        // Xử lý khi click vào Create New User (chuyển sang màn hình CreateUserActivity)
+        cardCreateUser.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, CreateUserActivity.class);
+            startActivity(intent);
+        });
+
+        // Xử lý khi click vào All Item Menu (chuyển sang màn hình AllItemActivity)
+        cardAllItemMenu.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AllItemActivity.class);
             startActivity(intent);
         });
     }
