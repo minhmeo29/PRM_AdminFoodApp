@@ -5,6 +5,7 @@ import static androidx.core.content.ContextCompat.startActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     CardView cardProfile;
     CardView cardCreateUser;
     CardView cardAllItemMenu;
+    CardView cardAddMenu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         cardProfile = findViewById(R.id.cardProfile);
         cardCreateUser = findViewById(R.id.cardCreateUser);
         cardAllItemMenu = findViewById(R.id.cardAllItemMenu);
+        cardAddMenu = findViewById(R.id.cardAddMenu);
 
         // Xử lý khi click vào Dispatch (chuyển sang màn hình OutForDelivery)
         cardDispatch.setOnClickListener(view -> {
@@ -61,6 +65,11 @@ public class MainActivity extends AppCompatActivity {
         // Xử lý khi click vào All Item Menu (chuyển sang màn hình AllItemActivity)
         cardAllItemMenu.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AllItemActivity.class);
+            startActivity(intent);
+        });
+
+        cardAddMenu.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
             startActivity(intent);
         });
     }
