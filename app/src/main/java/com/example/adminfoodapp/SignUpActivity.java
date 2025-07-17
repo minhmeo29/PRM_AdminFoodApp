@@ -6,18 +6,14 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.example.adminfoodapp.databinding.ActivitySignUpBinding;
 import com.example.adminfoodapp.model.UserModel;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
 public class SignUpActivity extends AppCompatActivity {
 
     private String userName;
@@ -36,39 +32,38 @@ public class SignUpActivity extends AppCompatActivity {
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Initialize Firebase Auth
+        // Initialize Firebase
         auth = FirebaseAuth.getInstance();
-        // Initialize Firebase Database
         database = FirebaseDatabase.getInstance().getReference();
 
-        // Set up location dropdown
-        String[] locationList = {"Hà Nội", "Nam Định", "Hải Phòng", "Quảng Ninh"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                this,
-                android.R.layout.simple_list_item_1,
-                locationList
-        );
-        binding.listOfLocation.setAdapter(adapter);
-
-        // Click listener for Create Account
-        binding.createUserButton.setOnClickListener(v -> {
+        // Button: Create Account
+        binding.createAccountButton.setOnClickListener(view -> {
             userName = binding.name.getText().toString().trim();
             nameOfRestaurant = binding.restaurantName.getText().toString().trim();
             email = binding.emailOrPhone.getText().toString().trim();
-            password = binding.passsword.getText().toString().trim();
+            password = binding.password.getText().toString().trim();
 
             if (userName.isEmpty() || nameOfRestaurant.isEmpty() || email.isEmpty() || password.isEmpty()) {
-                Toast.makeText(this, "Please fill all details", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SignUpActivity.this, "Please fill all details", Toast.LENGTH_SHORT).show();
             } else {
                 createAccount(email, password);
             }
         });
 
-        // Click listener for Already Have Account
-        binding.alreadyHaveAccountButton.setOnClickListener(v -> {
+        // Button: Already have account
+        binding.alreadyHaveAccount.setOnClickListener(view -> {
             Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
             startActivity(intent);
         });
+
+        // Location list for AutoComplete
+        String[] locationList = {"Jaipur", "Odisha", "Bundi", "Sikar"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_list_item_1,
+                locationList
+        );
+        binding.locationDropdown.setAdapter(adapter);
     }
 
     private void createAccount(String email, String password) {
@@ -89,12 +84,16 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void saveUserData() {
+        // Truy suất thông tin người dùng từ các trường nhập liệu
         userName = binding.name.getText().toString().trim();
         nameOfRestaurant = binding.restaurantName.getText().toString().trim();
         email = binding.emailOrPhone.getText().toString().trim();
-        password = binding.passsword.getText().toString().trim();
-        UserModel user = new UserModel(userName, nameOfRestaurant, email, password);
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        database.child("user").child(userId).setValue(user);
+        password = binding.password.getText().toString().trim();
+
+        UserModel user = new UserModel(userName, nameOfRestaurant, email, password, null, null);
+        String userId = auth.getCurrentUser().getUid();
+
+        // Lưu thông tin người dùng vào Firebase Realtime Database
+        database.child("users").child(userId).setValue(user);
     }
 }
