@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     CardView cardAllItemMenu;
     CardView cardAddMenu;
 
+    CardView cardLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         cardCreateUser = findViewById(R.id.cardCreateUser);
         cardAllItemMenu = findViewById(R.id.cardAllItemMenu);
         cardAddMenu = findViewById(R.id.cardAddMenu);
+        cardLogout = findViewById(R.id.cardLogout);
+
 
         // Xử lý khi click vào Dispatch (chuyển sang màn hình OutForDelivery)
         cardDispatch.setOnClickListener(view -> {
@@ -72,6 +76,17 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
             startActivity(intent);
         });
+
+
+        cardLogout.setOnClickListener(view -> {
+            FirebaseAuth.getInstance().signOut(); // <== Đăng xuất khỏi FirebaseAuth
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa toàn bộ back stack
+            startActivity(intent);
+            finish(); // Đóng MainActivity
+        });
+
+
     }
 
 
