@@ -8,10 +8,27 @@ public class UserModel {
     private String address;
     private String phone;
 
+
+    // Required empty constructor for Firebase
     public UserModel() {
-        // Constructor mặc định
     }
 
+    // Constructor for creating a user with minimal details
+    public UserModel(String name,String nameOfRestaurant, String email, String password) {
+        this.name = name;
+        this.nameOfRestaurant = nameOfRestaurant;
+        this.email = email;
+        this.password = password;
+    }
+
+    public UserModel(String email, String password)
+    {
+        this.email = email;
+        this.password = password;
+    }
+
+
+    // Full constructor
     public UserModel(String name, String nameOfRestaurant, String email, String password, String address, String phone) {
         this.name = name;
         this.nameOfRestaurant = nameOfRestaurant;
@@ -69,4 +86,5 @@ public class UserModel {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
 }

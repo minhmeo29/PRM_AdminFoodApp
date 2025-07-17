@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
 
     <androidx.cardview.widget.CardView
+        app:cardCornerRadius="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:elevation="2dp"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:elevation="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -25,18 +25,18 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView9"
+                app:cardCornerRadius="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                app:cardCornerRadius="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_marginBottom="8dp">
 
                 <ImageView
-                    android:id="@+id/foodImage"
+                    android:id="@+id/orderdFoodImage"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:scaleType="centerCrop"
@@ -44,55 +44,57 @@
             </androidx.cardview.widget.CardView>
 
             <TextView
-                android:id="@+id/foodName"
+                android:id="@+id/customerName"
+                app:layout_constraintBottom_toTopOf="@+id/textView18"
+                app:layout_constraintStart_toEndOf="@+id/cardView9"
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:fontFamily="@font/yeonsung_regular"
                 android:text="Name Customer"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/textView18"
-                app:layout_constraintStart_toEndOf="@+id/cardView9"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="16sp" />
 
             <TextView
 
                 android:id="@+id/textView18"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cardView9"
+                app:layout_constraintTop_toBottomOf="@+id/customerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-
-                android:text="Quantity"
+                android:fontFamily="@font/yeonsung_regular"
+                android:text="Total Pay"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/cardView9"
-                app:layout_constraintTop_toBottomOf="@+id/foodName" />
+                android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/foodQuantity"
+                android:id="@+id/pendingOredarQuantity"
+                app:layout_constraintBottom_toBottomOf="@+id/textView18"
+                app:layout_constraintStart_toEndOf="@+id/textView18"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:fontFamily="@font/yeonsung_regular"
                 android:text="8"
                 android:textColor="@color/textColor"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView18"
-                app:layout_constraintStart_toEndOf="@+id/textView18" />
+                android:textSize="20sp" />
 
-            <TextView
-                android:id="@+id/foodPrice"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/orderedAcceptButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_marginRight="24dp"
-
-                android:text="10$"
+                android:background="@drawable/greenbuttonshape"
+                android:fontFamily="@font/yeonsung_regular"
+                android:text="Accept"
                 android:textAllCaps="false"
-                android:textColor="@color/textColor"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textColor="@color/white" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
