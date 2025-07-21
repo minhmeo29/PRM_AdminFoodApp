@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     CardView cardCreateUser;
     CardView cardAllItemMenu;
     CardView cardAddMenu;
+    CardView cardPendingOrder;
 
 
     @Override
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         cardCreateUser = findViewById(R.id.cardCreateUser);
         cardAllItemMenu = findViewById(R.id.cardAllItemMenu);
         cardAddMenu = findViewById(R.id.cardAddMenu);
+        cardPendingOrder = findViewById(R.id.cardView1);
 
         // Xử lý khi click vào Dispatch (chuyển sang màn hình OutForDelivery)
         cardDispatch.setOnClickListener(view -> {
@@ -70,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
         cardAddMenu.setOnClickListener(view -> {
             Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+            startActivity(intent);
+        });
+
+        cardPendingOrder.setOnClickListener(view -> {
+            Intent intent = new Intent(MainActivity.this, PendingOrderActivity.class);
             startActivity(intent);
         });
     }

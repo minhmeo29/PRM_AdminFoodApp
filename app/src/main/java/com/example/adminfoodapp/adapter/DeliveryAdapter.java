@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adminfoodapp.R;
+import com.example.adminfoodapp.model.OrderDetails;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,12 +19,10 @@ import java.util.Map;
 
 public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.DeliveryViewHolder> {
 
-    private final ArrayList<String> customerNames;
-    private final ArrayList<String> moneyStatuses;
+    private final ArrayList<OrderDetails> orderList;
 
-    public DeliveryAdapter(ArrayList<String> customerNames, ArrayList<String> moneyStatuses) {
-        this.customerNames = customerNames;
-        this.moneyStatuses = moneyStatuses;
+    public DeliveryAdapter(ArrayList<OrderDetails> orderList) {
+        this.orderList = orderList;
     }
 
     @NonNull
@@ -36,12 +35,12 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
 
     @Override
     public void onBindViewHolder(@NonNull DeliveryViewHolder holder, int position) {
-        holder.bind(customerNames.get(position), moneyStatuses.get(position));
+        holder.bind(orderList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return customerNames.size();
+        return orderList.size();
     }
 
     static class DeliveryViewHolder extends RecyclerView.ViewHolder {
@@ -49,30 +48,37 @@ public class DeliveryAdapter extends RecyclerView.Adapter<DeliveryAdapter.Delive
         private final TextView customerName;
         private final TextView statusMoney;
         private final CardView statusColor;
+        private final TextView totalPrice;
 
         public DeliveryViewHolder(@NonNull View itemView) {
             super(itemView);
             customerName = itemView.findViewById(R.id.customerName);
             statusMoney = itemView.findViewById(R.id.statusMoney);
             statusColor = itemView.findViewById(R.id.StatusColor);
+            totalPrice = itemView.findViewById(R.id.totalPrice);
         }
 
-        public void bind(String name, String status) {
-            customerName.setText(name);
-            statusMoney.setText(status);
-
-            // Chuyển status về lowercase để đồng nhất
-            String key = status.toLowerCase().trim();
-
-            // Tạo map màu
-            Map<String, Integer> colorMap = new HashMap<>();
-            colorMap.put("received", Color.parseColor("#4CAF50"));      // xanh lá
-            colorMap.put("not received", Color.parseColor("#F44336"));  // đỏ
-            colorMap.put("pending", Color.parseColor("#FFC107"));       // vàng
-
-            int color = colorMap.getOrDefault(key, Color.DKGRAY);
-
-            // Đặt màu
+        public void bind(OrderDetails order) {
+            customerName.setText(order.getUserName() != null ? order.getUserName() : "");
+            String paymentStatus = order.isPaymentReceived() ? "received" : "not received";
+            statusMoney.setText("Payment: " + paymentStatus);
+            if (totalPrice != null) {
+                totalPrice.setText("Total: " + (order.getTotalPrice() != null ? order.getTotalPrice() : ""));
+            }
+            // Đặt màu trạng thái
+            int color;
+            switch (paymentStatus) {
+                case "received":
+                    color = Color.parseColor("#4CAF50"); // xanh lá
+                    break;
+                case "pending":
+                    color = Color.parseColor("#FFC107"); // vàng
+                    break;
+                case "not received":
+                default:
+                    color = Color.parseColor("#F44336"); // đỏ
+                    break;
+            }
             statusMoney.setTextColor(color);
             statusColor.setCardBackgroundColor(color);
         }

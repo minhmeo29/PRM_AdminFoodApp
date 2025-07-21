@@ -10,6 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.adminfoodapp.adapter.DeliveryAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import java.util.List;
 
 import java.util.ArrayList;
 
@@ -17,6 +23,7 @@ public class OutForDeliveryActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private RecyclerView deliveryRecyclerView;
+    private DatabaseReference databaseOrderDetails;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,19 +37,32 @@ public class OutForDeliveryActivity extends AppCompatActivity {
         // Bắt sự kiện nút quay lại
         backButton.setOnClickListener(v -> finish());
 
-        // Dữ liệu mẫu
-        ArrayList<String> customerNames = new ArrayList<>();
-        customerNames.add("John Doe");
-        customerNames.add("Jane Smith");
-        customerNames.add("Mike Johnson");
+        databaseOrderDetails = FirebaseDatabase.getInstance().getReference().child("OrderDetails");
+        getOrdersDetails();
+    }
 
-        ArrayList<String> moneyStatuses = new ArrayList<>();
-        moneyStatuses.add("received");
-        moneyStatuses.add("notReceived");
-        moneyStatuses.add("Pending");
+    private void getOrdersDetails() {
+        databaseOrderDetails.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                ArrayList<com.example.adminfoodapp.model.OrderDetails> orderList = new ArrayList<>();
+                for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
+                    com.example.adminfoodapp.model.OrderDetails order = orderSnapshot.getValue(com.example.adminfoodapp.model.OrderDetails.class);
+                    if (order != null && order.isOrderAccepted()) {
+                        orderList.add(order);
+                    }
+                }
+                setAdapter(orderList);
+            }
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Handle error if needed
+            }
+        });
+    }
 
-        // Gắn adapter cho RecyclerView
-        DeliveryAdapter adapter = new DeliveryAdapter(customerNames, moneyStatuses);
+    private void setAdapter(ArrayList<com.example.adminfoodapp.model.OrderDetails> orderList) {
+        com.example.adminfoodapp.adapter.DeliveryAdapter adapter = new com.example.adminfoodapp.adapter.DeliveryAdapter(orderList);
         deliveryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         deliveryRecyclerView.setAdapter(adapter);
     }
