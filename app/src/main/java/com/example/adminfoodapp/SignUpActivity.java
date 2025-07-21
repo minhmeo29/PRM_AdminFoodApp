@@ -37,11 +37,11 @@ public class SignUpActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance().getReference();
 
         // Button: Create Account
-        binding.createAccountButton.setOnClickListener(view -> {
+        binding.createUserButton.setOnClickListener(view -> {
             userName = binding.name.getText().toString().trim();
             nameOfRestaurant = binding.restaurantName.getText().toString().trim();
             email = binding.emailOrPhone.getText().toString().trim();
-            password = binding.password.getText().toString().trim();
+            password = binding.passsword.getText().toString().trim();
 
             if (userName.isEmpty() || nameOfRestaurant.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(SignUpActivity.this, "Please fill all details", Toast.LENGTH_SHORT).show();
@@ -51,7 +51,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
         // Button: Already have account
-        binding.alreadyHaveAccount.setOnClickListener(view -> {
+        binding.alreadyHaveAccountButton.setOnClickListener(view -> {
             Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
             startActivity(intent);
         });
@@ -63,7 +63,7 @@ public class SignUpActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1,
                 locationList
         );
-        binding.locationDropdown.setAdapter(adapter);
+        binding.listOfLocation.setAdapter(adapter);
     }
 
     private void createAccount(String email, String password) {
@@ -88,7 +88,7 @@ public class SignUpActivity extends AppCompatActivity {
         userName = binding.name.getText().toString().trim();
         nameOfRestaurant = binding.restaurantName.getText().toString().trim();
         email = binding.emailOrPhone.getText().toString().trim();
-        password = binding.password.getText().toString().trim();
+        password = binding.passsword.getText().toString().trim();
 
         UserModel user = new UserModel(userName, nameOfRestaurant, email, password, null, null);
         String userId = auth.getCurrentUser().getUid();
