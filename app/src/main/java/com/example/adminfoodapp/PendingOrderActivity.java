@@ -82,7 +82,7 @@ public class PendingOrderActivity extends AppCompatActivity implements PendingOr
     public void onItemClickListener(int position) {
         Intent intent = new Intent(this, OrderDetailsActivity.class);
         OrderDetails userOrderDetails = listOfOrderItem.get(position);
-        intent.putExtra("UserOrderDetails", userOrderDetails);
+        intent.putExtra("OrderDetails", userOrderDetails);
         startActivity(intent);
     }
 

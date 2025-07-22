@@ -29,7 +29,7 @@ public class OrderDetailsActivity extends AppCompatActivity {
     }
 
     private void getDataFromIntent() {
-        OrderDetails receivedOrderDetails = (OrderDetails) getIntent().getSerializableExtra("UserOrderDetails");
+        OrderDetails receivedOrderDetails = (OrderDetails) getIntent().getSerializableExtra("OrderDetails");
         if (receivedOrderDetails != null) {
             userName = receivedOrderDetails.getUserName();
             foodNames = (ArrayList<String>) receivedOrderDetails.getFoodNames();
