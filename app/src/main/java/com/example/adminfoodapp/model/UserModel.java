@@ -8,6 +8,7 @@ public class UserModel {
     private String address;
     private String phone;
 
+
     // Required empty constructor for Firebase
     public UserModel() {
     }
@@ -37,7 +38,7 @@ public class UserModel {
         this.phone = phone;
     }
 
-    // Getters and setters (you can use Lombok or generate automatically)
+    // Getter và Setter
     public String getName() {
         return name;
     }
@@ -85,4 +86,5 @@ public class UserModel {
     public void setPhone(String phone) {
         this.phone = phone;
     }
+
 }

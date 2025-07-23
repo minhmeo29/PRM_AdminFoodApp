@@ -41,15 +41,15 @@ public class PendingOrderActivity extends AppCompatActivity implements PendingOr
         databaseOrderDetails.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listOfOrderItem.clear();
                 for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
                     OrderDetails orderDetails = orderSnapshot.getValue(OrderDetails.class);
-                    if (orderDetails != null) {
+                    if (orderDetails != null && !Boolean.TRUE.equals(orderDetails.isOrderAccepted())) {
                         listOfOrderItem.add(orderDetails);
                     }
                 }
                 addDataToListForRecyclerView();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle error if needed
@@ -82,7 +82,7 @@ public class PendingOrderActivity extends AppCompatActivity implements PendingOr
     public void onItemClickListener(int position) {
         Intent intent = new Intent(this, OrderDetailsActivity.class);
         OrderDetails userOrderDetails = listOfOrderItem.get(position);
-        intent.putExtra("UserOrderDetails", userOrderDetails);
+        intent.putExtra("OrderDetails", userOrderDetails);
         startActivity(intent);
     }
 

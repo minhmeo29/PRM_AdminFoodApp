@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     CardView cardCreateUser;
     CardView cardAllItemMenu;
     CardView cardAddMenu;
+    CardView cardPendingOrder;
 
     CardView cardLogout;
 
@@ -46,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         cardAllItemMenu = findViewById(R.id.cardAllItemMenu);
         cardAddMenu = findViewById(R.id.cardAddMenu);
         cardLogout = findViewById(R.id.cardLogout);
-
 
         // Xử lý khi click vào Dispatch (chuyển sang màn hình OutForDelivery)
         cardDispatch.setOnClickListener(view -> {
@@ -77,16 +77,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-        cardLogout.setOnClickListener(view -> {
+ cardLogout.setOnClickListener(view -> {
             FirebaseAuth.getInstance().signOut(); // <== Đăng xuất khỏi FirebaseAuth
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Xóa toàn bộ back stack
             startActivity(intent);
             finish(); // Đóng MainActivity
         });
-
-
     }
 
 
