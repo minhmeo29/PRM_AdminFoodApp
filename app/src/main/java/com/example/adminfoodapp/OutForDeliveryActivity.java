@@ -18,12 +18,15 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.List;
 
 import java.util.ArrayList;
+import com.example.adminfoodapp.model.OrderDetails;
+import com.google.firebase.database.Query;
 
 public class OutForDeliveryActivity extends AppCompatActivity {
 
     private ImageButton backButton;
     private RecyclerView deliveryRecyclerView;
     private DatabaseReference databaseOrderDetails;
+    private ArrayList<OrderDetails> listOfCompleteOrderList = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,33 +40,37 @@ public class OutForDeliveryActivity extends AppCompatActivity {
         // Bắt sự kiện nút quay lại
         backButton.setOnClickListener(v -> finish());
 
-        databaseOrderDetails = FirebaseDatabase.getInstance().getReference().child("OrderDetails");
-        getOrdersDetails();
+        retrieveCompleteOrderDetail();
     }
 
-    private void getOrdersDetails() {
-        databaseOrderDetails.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void retrieveCompleteOrderDetail() {
+        // Lấy dữ liệu từ CompletedOrder, sắp xếp theo currentTime
+        Query completeOrderReference = FirebaseDatabase.getInstance().getReference()
+            .child("CompletedOrder").orderByChild("currentTime");
+        completeOrderReference.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                ArrayList<com.example.adminfoodapp.model.OrderDetails> orderList = new ArrayList<>();
-                for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
-                    com.example.adminfoodapp.model.OrderDetails order = orderSnapshot.getValue(com.example.adminfoodapp.model.OrderDetails.class);
-                    if (order != null && order.isOrderAccepted()) {
-                        orderList.add(order);
+            public void onDataChange(com.google.firebase.database.DataSnapshot snapshot) {
+                listOfCompleteOrderList.clear();
+                for (com.google.firebase.database.DataSnapshot orderSnapshot : snapshot.getChildren()) {
+                    OrderDetails completeOrder = orderSnapshot.getValue(OrderDetails.class);
+                    if (completeOrder != null) {
+                        listOfCompleteOrderList.add(completeOrder);
                     }
                 }
-                setAdapter(orderList);
+                // Đảo ngược list để đơn mới nhất lên đầu
+                java.util.Collections.reverse(listOfCompleteOrderList);
+                setDataIntoRecyclerView();
             }
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(com.google.firebase.database.DatabaseError error) {
                 // Handle error if needed
             }
         });
     }
 
-    private void setAdapter(ArrayList<com.example.adminfoodapp.model.OrderDetails> orderList) {
-        com.example.adminfoodapp.adapter.DeliveryAdapter adapter = new com.example.adminfoodapp.adapter.DeliveryAdapter(orderList);
-        deliveryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    private void setDataIntoRecyclerView() {
+        com.example.adminfoodapp.adapter.DeliveryAdapter adapter = new com.example.adminfoodapp.adapter.DeliveryAdapter(listOfCompleteOrderList);
         deliveryRecyclerView.setAdapter(adapter);
+        deliveryRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }

@@ -17,6 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class PendingOrderActivity extends AppCompatActivity implements PendingOrderAdapter.OnItemClicked {
     private ActivityPendingOrderBinding binding;
     private final List<String> listOfName = new ArrayList<>();
@@ -44,7 +45,7 @@ public class PendingOrderActivity extends AppCompatActivity implements PendingOr
                 listOfOrderItem.clear();
                 for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
                     OrderDetails orderDetails = orderSnapshot.getValue(OrderDetails.class);
-                    if (orderDetails != null && !Boolean.TRUE.equals(orderDetails.isOrderAccepted())) {
+                    if (orderDetails != null) {
                         listOfOrderItem.add(orderDetails);
                     }
                 }
@@ -58,6 +59,9 @@ public class PendingOrderActivity extends AppCompatActivity implements PendingOr
     }
 
     private void addDataToListForRecyclerView() {
+        listOfName.clear();
+        listOfTotalPrice.clear();
+        listOfImageFirstFoodOrder.clear();
         for (OrderDetails orderItem : listOfOrderItem) {
             if (orderItem.getUserName() != null) listOfName.add(orderItem.getUserName());
             if (orderItem.getTotalPrice() != null) listOfTotalPrice.add(orderItem.getTotalPrice());
@@ -74,7 +78,7 @@ public class PendingOrderActivity extends AppCompatActivity implements PendingOr
 
     private void setAdapter() {
         binding.pendingOrderRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        PendingOrderAdapter adapter = new PendingOrderAdapter(this, listOfName, listOfTotalPrice, listOfImageFirstFoodOrder, this);
+        PendingOrderAdapter adapter = new PendingOrderAdapter(this, listOfName, listOfTotalPrice, listOfImageFirstFoodOrder, listOfOrderItem, this);
         binding.pendingOrderRecyclerView.setAdapter(adapter);
     }
 
@@ -88,19 +92,69 @@ public class PendingOrderActivity extends AppCompatActivity implements PendingOr
 
     @Override
     public void onItemAcceptClickListener(int position) {
-        String childItemPushKey = listOfOrderItem.get(position).getItemPushKey();
+        OrderDetails order = listOfOrderItem.get(position);
+        String childItemPushKey = order.getItemPushKey();
+        String userUid = order.getUserUid();
         DatabaseReference clickItemOrderReference = childItemPushKey != null ? database.getReference().child("OrderDetails").child(childItemPushKey) : null;
         if (clickItemOrderReference != null) {
             clickItemOrderReference.child("orderAccepted").setValue(true);
+        }
+        // Đồng bộ AcceptedOrder = true và orderAccepted = true ở BuyHistory của user
+        if (userUid != null && childItemPushKey != null) {
+            DatabaseReference buyHistoryRef = database.getReference()
+                .child("users").child(userUid).child("BuyHistory").child(childItemPushKey);
+            buyHistoryRef.child("AcceptedOrder").setValue(true);
+            buyHistoryRef.child("orderAccepted").setValue(true);
         }
         updateOrderAcceptStatus(position);
     }
 
     @Override
     public void onItemDispatchClickListener(int position) {
-        String dispatchItemPushKey = listOfOrderItem.get(position).getItemPushKey();
-        DatabaseReference dispatchItemOrderReference = database.getReference().child("CompletedOrder").child(dispatchItemPushKey);
-        dispatchItemOrderReference.setValue(listOfOrderItem.get(position)).addOnSuccessListener(aVoid -> deleteThisItemFromOrderDetails(dispatchItemPushKey));
+        OrderDetails order = listOfOrderItem.get(position);
+        String dispatchItemPushKey = order.getItemPushKey();
+        if (dispatchItemPushKey != null) {
+            // Log thông tin trước khi ghi
+            android.util.Log.d("DispatchDebug", "PushKey: " + dispatchItemPushKey
+                    + ", userUid: " + order.getUserUid()
+                    + ", itemPushKey: " + order.getItemPushKey()
+                    + ", userName: " + order.getUserName()
+                    + ", totalPrice: " + order.getTotalPrice()
+                    // Thêm các trường khác nếu cần
+            );
+
+            // Đẩy sang CompletedOrder
+            DatabaseReference completedOrderRef = database.getReference().child("CompletedOrder").child(dispatchItemPushKey);
+            completedOrderRef.setValue(order)
+                .addOnSuccessListener(aVoid -> {
+                    // Xóa khỏi OrderDetails
+                    DatabaseReference orderDetailsRef = database.getReference().child("OrderDetails").child(dispatchItemPushKey);
+                    orderDetailsRef.removeValue()
+                        .addOnSuccessListener(aVoid2 -> {
+                            listOfOrderItem.remove(position);
+                            listOfName.remove(position);
+                            listOfTotalPrice.remove(position);
+                            listOfImageFirstFoodOrder.remove(position);
+                            setAdapter();
+                            Toast.makeText(this, "Đã xóa khỏi OrderDetails", Toast.LENGTH_SHORT).show();
+                            android.util.Log.d("DispatchDebug", "Đã xóa khỏi OrderDetails: " + dispatchItemPushKey);
+                            // Gọi lại getOrdersDetails để reload danh sách từ Firebase
+                            getOrdersDetails();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(this, "Lỗi xóa OrderDetails: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            android.util.Log.e("DispatchDebug", "Lỗi xóa OrderDetails: " + e.getMessage());
+                        });
+                    android.util.Log.d("DispatchDebug", "CompletedOrder write SUCCESS");
+                })
+                .addOnFailureListener(e -> {
+                    android.util.Log.e("DispatchDebug", "Failed to write CompletedOrder: " + e.getMessage());
+                    Toast.makeText(this, "Failed to write CompletedOrder: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                });
+        } else {
+            android.util.Log.e("DispatchDebug", "dispatchItemPushKey is null!");
+            Toast.makeText(this, "dispatchItemPushKey is null!", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void deleteThisItemFromOrderDetails(String dispatchItemPushKey) {
@@ -111,7 +165,7 @@ public class PendingOrderActivity extends AppCompatActivity implements PendingOr
     private void updateOrderAcceptStatus(int position) {
         String userIdOfClickedItem = listOfOrderItem.get(position).getUserUid();
         String pushKeyOfClickedItem = listOfOrderItem.get(position).getItemPushKey();
-        DatabaseReference buyHistoryReference = database.getReference().child("user").child(userIdOfClickedItem).child("BuyHistory").child(pushKeyOfClickedItem);
+        DatabaseReference buyHistoryReference = database.getReference().child("users").child(userIdOfClickedItem).child("BuyHistory").child(pushKeyOfClickedItem);
         buyHistoryReference.child("orderAccepted").setValue(true);
         databaseOrderDetails.child(pushKeyOfClickedItem).child("orderAccepted").setValue(true);
     }
