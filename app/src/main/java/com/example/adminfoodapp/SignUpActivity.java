@@ -90,7 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
         email = binding.emailOrPhone.getText().toString().trim();
         password = binding.passsword.getText().toString().trim();
 
-        UserModel user = new UserModel(userName, nameOfRestaurant, email, password, null, null);
+        UserModel user = new UserModel(userName, email, password);
         String userId = auth.getCurrentUser().getUid();
 
         // Lưu thông tin người dùng vào Firebase Realtime Database

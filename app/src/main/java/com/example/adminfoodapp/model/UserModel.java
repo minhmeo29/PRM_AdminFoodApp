@@ -2,7 +2,6 @@ package com.example.adminfoodapp.model;
 
 public class UserModel {
     private String name;
-    private String nameOfRestaurant;
     private String email;
     private String password;
     private String address;
@@ -14,9 +13,8 @@ public class UserModel {
     }
 
     // Constructor for creating a user with minimal details
-    public UserModel(String name,String nameOfRestaurant, String email, String password) {
+    public UserModel(String name, String email, String password) {
         this.name = name;
-        this.nameOfRestaurant = nameOfRestaurant;
         this.email = email;
         this.password = password;
     }
@@ -29,9 +27,8 @@ public class UserModel {
 
 
     // Full constructor
-    public UserModel(String name, String nameOfRestaurant, String email, String password, String address, String phone) {
+    public UserModel(String name, String email, String password, String address, String phone) {
         this.name = name;
-        this.nameOfRestaurant = nameOfRestaurant;
         this.email = email;
         this.password = password;
         this.address = address;
@@ -45,14 +42,6 @@ public class UserModel {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getNameOfRestaurant() {
-        return nameOfRestaurant;
-    }
-
-    public void setNameOfRestaurant(String nameOfRestaurant) {
-        this.nameOfRestaurant = nameOfRestaurant;
     }
 
     public String getEmail() {

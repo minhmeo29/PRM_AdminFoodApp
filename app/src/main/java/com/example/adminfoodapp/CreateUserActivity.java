@@ -37,7 +37,7 @@ public class CreateUserActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(this, "User created successfully", Toast.LENGTH_SHORT).show();
                             String userId = auth.getCurrentUser().getUid();
-                            com.example.adminfoodapp.model.UserModel user = new com.example.adminfoodapp.model.UserModel(name, "", email, password);
+                            com.example.adminfoodapp.model.UserModel user = new com.example.adminfoodapp.model.UserModel(name, email, password);
                             database.child("users").child(userId).setValue(user);
                             finish();
                         } else {

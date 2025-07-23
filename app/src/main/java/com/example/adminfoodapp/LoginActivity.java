@@ -135,7 +135,7 @@ public class LoginActivity extends AppCompatActivity {
         email = binding.email.getText().toString().trim();
         password = binding.password.getText().toString().trim();
 
-        UserModel user = new UserModel(userName, nameOfRestaurant, email, password, null, null);
+        UserModel user = new UserModel(userName, email, password);
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         if (userId != null) {
