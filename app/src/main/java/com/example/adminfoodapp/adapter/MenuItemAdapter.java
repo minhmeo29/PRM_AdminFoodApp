@@ -74,7 +74,22 @@ public class MenuItemAdapter extends RecyclerView.Adapter<MenuItemAdapter.AddIte
             int quantity = itemQuantities[position];
 
             binding.foodNameTextView.setText(menuItem.getFoodName());
-            binding.priceTextView.setText(menuItem.getFoodPrice());
+            String priceStr = menuItem.getFoodPrice();
+            String formattedPrice;
+
+            if (priceStr.matches("\\d+")) {  // Nếu toàn bộ là số
+                try {
+                    int price = Integer.parseInt(priceStr);
+                    java.text.NumberFormat formatter = java.text.NumberFormat.getInstance(new java.util.Locale("vi", "VN"));
+                    formattedPrice = formatter.format(price) + " VND";
+                } catch (NumberFormatException e) {
+                    formattedPrice = priceStr + " VND"; // fallback nếu lỗi
+                }
+            } else {
+                formattedPrice = priceStr; // đã định dạng sẵn như "50,000 VND"
+            }
+
+            binding.priceTextView.setText(formattedPrice);
 
             if (menuItem.getFoodImage() != null) {
                 Uri uri = Uri.parse(menuItem.getFoodImage());

@@ -90,6 +90,7 @@ public class AllItemActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     menuItems.remove(position);
                     adapter.notifyItemRemoved(position);
+                    Toast.makeText(this, "Item deleted successfully", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(this, "Item not deleted", Toast.LENGTH_SHORT).show();
                 }
