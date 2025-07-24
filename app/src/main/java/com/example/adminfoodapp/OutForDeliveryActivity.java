@@ -44,10 +44,10 @@ public class OutForDeliveryActivity extends AppCompatActivity {
     }
 
     private void retrieveCompleteOrderDetail() {
-        // Lấy dữ liệu từ CompletedOrder, sắp xếp theo currentTime
-        Query completeOrderReference = FirebaseDatabase.getInstance().getReference()
-            .child("CompletedOrder").orderByChild("currentTime");
-        completeOrderReference.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+        // Lấy dữ liệu từ OrderDetails, chỉ lấy đơn orderAccepted = true
+        Query orderDetailsReference = FirebaseDatabase.getInstance().getReference()
+            .child("OrderDetails").orderByChild("orderAccepted").equalTo(true);
+        orderDetailsReference.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
             @Override
             public void onDataChange(com.google.firebase.database.DataSnapshot snapshot) {
                 listOfCompleteOrderList.clear();
@@ -57,7 +57,6 @@ public class OutForDeliveryActivity extends AppCompatActivity {
                         listOfCompleteOrderList.add(completeOrder);
                     }
                 }
-                // Đảo ngược list để đơn mới nhất lên đầu
                 java.util.Collections.reverse(listOfCompleteOrderList);
                 setDataIntoRecyclerView();
             }

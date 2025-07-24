@@ -114,43 +114,13 @@ public class PendingOrderActivity extends AppCompatActivity implements PendingOr
         OrderDetails order = listOfOrderItem.get(position);
         String dispatchItemPushKey = order.getItemPushKey();
         if (dispatchItemPushKey != null) {
-            // Log thông tin trước khi ghi
-            android.util.Log.d("DispatchDebug", "PushKey: " + dispatchItemPushKey
-                    + ", userUid: " + order.getUserUid()
-                    + ", itemPushKey: " + order.getItemPushKey()
-                    + ", userName: " + order.getUserName()
-                    + ", totalPrice: " + order.getTotalPrice()
-                    // Thêm các trường khác nếu cần
-            );
-
-            // Đẩy sang CompletedOrder
-            DatabaseReference completedOrderRef = database.getReference().child("CompletedOrder").child(dispatchItemPushKey);
-            completedOrderRef.setValue(order)
-                .addOnSuccessListener(aVoid -> {
-                    // Xóa khỏi OrderDetails
-                    DatabaseReference orderDetailsRef = database.getReference().child("OrderDetails").child(dispatchItemPushKey);
-                    orderDetailsRef.removeValue()
-                        .addOnSuccessListener(aVoid2 -> {
-                            listOfOrderItem.remove(position);
-                            listOfName.remove(position);
-                            listOfTotalPrice.remove(position);
-                            listOfImageFirstFoodOrder.remove(position);
-                            setAdapter();
-                            Toast.makeText(this, "Đã xóa khỏi OrderDetails", Toast.LENGTH_SHORT).show();
-                            android.util.Log.d("DispatchDebug", "Đã xóa khỏi OrderDetails: " + dispatchItemPushKey);
-                            // Gọi lại getOrdersDetails để reload danh sách từ Firebase
-                            getOrdersDetails();
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(this, "Lỗi xóa OrderDetails: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                            android.util.Log.e("DispatchDebug", "Lỗi xóa OrderDetails: " + e.getMessage());
-                        });
-                    android.util.Log.d("DispatchDebug", "CompletedOrder write SUCCESS");
-                })
-                .addOnFailureListener(e -> {
-                    android.util.Log.e("DispatchDebug", "Failed to write CompletedOrder: " + e.getMessage());
-                    Toast.makeText(this, "Failed to write CompletedOrder: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                });
+            // Chỉ cập nhật trạng thái orderAccepted (hoặc có thể thêm dispatched nếu muốn)
+            DatabaseReference orderDetailsRef = database.getReference().child("OrderDetails").child(dispatchItemPushKey);
+            orderDetailsRef.child("orderAccepted").setValue(true);
+            // Nếu muốn thêm trường dispatched:
+            // orderDetailsRef.child("dispatched").setValue(true);
+            Toast.makeText(this, "Đơn đã được dispatch (orderAccepted=true)", Toast.LENGTH_SHORT).show();
+            getOrdersDetails(); // Reload danh sách
         } else {
             android.util.Log.e("DispatchDebug", "dispatchItemPushKey is null!");
             Toast.makeText(this, "dispatchItemPushKey is null!", Toast.LENGTH_LONG).show();
