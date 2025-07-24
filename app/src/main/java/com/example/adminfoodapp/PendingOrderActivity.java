@@ -45,7 +45,8 @@ public class PendingOrderActivity extends AppCompatActivity implements PendingOr
                 listOfOrderItem.clear();
                 for (DataSnapshot orderSnapshot : snapshot.getChildren()) {
                     OrderDetails orderDetails = orderSnapshot.getValue(OrderDetails.class);
-                    if (orderDetails != null) {
+                    // Chỉ lấy đơn chưa accept
+                    if (orderDetails != null && !orderDetails.isOrderAccepted()) {
                         listOfOrderItem.add(orderDetails);
                     }
                 }
